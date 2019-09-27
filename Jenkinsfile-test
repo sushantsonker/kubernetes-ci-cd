@@ -1,0 +1,15 @@
+node {
+
+    stage "Build"
+    
+        sh "echo Build"
+    
+    stage "Push"
+
+        sh "echo push" 
+
+    stage "Deploy"
+
+        sh "echo Deploy"       
+
+}
