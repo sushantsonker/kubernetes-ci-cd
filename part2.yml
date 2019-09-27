@@ -11,7 +11,7 @@ parts:
         com: kubectl rollout status deployment/registry
 
       - cap: Let's build the Jenkins Docker image we'll use in our Kubernetes cluster. 
-        com: docker build -t 127.0.0.1:30400/jenkins:latest -f applications/jenkins/Dockerfile applications/jenkins
+        com: docker build -t 3.15.10.124:30400/jenkins:latest -f applications/jenkins/Dockerfile applications/jenkins
 
       - cap: Once again we'll need to set up the Socat Registry proxy container to push images, so let's build it. Feel free to skip this step in case the socat-registry image already exists from Part 1 (to check, run `docker images` in a separate terminal). 
         com: docker build -t socat-registry -f applications/socat/Dockerfile applications/socat
@@ -20,7 +20,7 @@ parts:
         com: docker stop socat-registry; docker rm socat-registry; docker run -d -e "REG_IP=`minikube ip`" -e "REG_PORT=30400" --name socat-registry -p 30400:5000 socat-registry; sleep 10
 
       - cap: With our proxy container up and running, we can now push our Jenkins image to the local repository.
-        com: docker push 127.0.0.1:30400/jenkins:latest
+        com: docker push 3.15.10.124:30400/jenkins:latest
 
       - cap: The proxy’s work is done, so you can go ahead and stop it.
         com: docker stop socat-registry

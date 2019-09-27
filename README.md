@@ -109,11 +109,11 @@ Let’s make a change to an HTML file in the cloned project. Open the /applicati
 
 Now let’s build an image, giving it a special name that points to our local cluster registry.
 
-`docker build -t 127.0.0.1:30400/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan`
+`docker build -t 3.15.10.124:30400/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan`
 
 #### Step13
 
-We’ve built the image, but before we can push it to the registry, we need to set up a temporary proxy. By default the Docker client can only push to HTTP (not HTTPS) via localhost. To work around this, we’ll set up a Docker container that listens on 127.0.0.1:30400 and forwards to our cluster. First, build the image for our proxy container.
+We’ve built the image, but before we can push it to the registry, we need to set up a temporary proxy. By default the Docker client can only push to HTTP (not HTTPS) via localhost. To work around this, we’ll set up a Docker container that listens on 3.15.10.124:30400 and forwards to our cluster. First, build the image for our proxy container.
 
 `docker build -t socat-registry -f applications/socat/Dockerfile applications/socat`
 
@@ -127,7 +127,7 @@ Now run the proxy container from the newly created image. (Note that you may see
 
 With our proxy container up and running, we can now push our hello-kenzan image to the local repository.
 
-`docker push 127.0.0.1:30400/hello-kenzan:latest`
+`docker push 3.15.10.124:30400/hello-kenzan:latest`
 
 #### Step16
 
@@ -161,7 +161,7 @@ Delete the hello-kenzan deployment and service you created. We are going to keep
 
 First, let's build the Jenkins Docker image we'll use in our Kubernetes cluster.
 
-`docker build -t 127.0.0.1:30400/jenkins:latest -f applications/jenkins/Dockerfile applications/jenkins`
+`docker build -t 3.15.10.124:30400/jenkins:latest -f applications/jenkins/Dockerfile applications/jenkins`
 
 #### Step2
 
@@ -179,7 +179,7 @@ Run the proxy container from the image.
 
 With our proxy container up and running, we can now push our Jenkins image to the local repository.
 
-`docker push 127.0.0.1:30400/jenkins:latest`
+`docker push 3.15.10.124:30400/jenkins:latest`
 
 #### Step5
 
@@ -282,7 +282,7 @@ The crossword application is a multi-tier application whose services depend on e
 
 Now we're going to walk through an initial build of the monitor-scale application.
 
-``docker build -t 127.0.0.1:30400/monitor-scale:`git rev-parse --short HEAD` -f applications/monitor-scale/Dockerfile applications/monitor-scale``
+``docker build -t 3.15.10.124:30400/monitor-scale:`git rev-parse --short HEAD` -f applications/monitor-scale/Dockerfile applications/monitor-scale``
 
 #### Step6
 
@@ -300,7 +300,7 @@ Run the proxy container from the newly created image.
 
 Push the monitor-scale image to the registry.
 
-``docker push 127.0.0.1:30400/monitor-scale:`git rev-parse --short HEAD` ``
+``docker push 3.15.10.124:30400/monitor-scale:`git rev-parse --short HEAD` ``
 
 #### Step9
 
@@ -324,7 +324,7 @@ Monitor-scale has the functionality to let us scale our puzzle app up and down t
 
 Create the monitor-scale deployment and the Ingress defining the hostname by which this service will be accessible to the other services.
 
-``sed 's#127.0.0.1:30400/monitor-scale:$BUILD_TAG#127.0.0.1:30400/monitor-scale:'`git rev-parse --short HEAD`'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -``
+``sed 's#3.15.10.124:30400/monitor-scale:$BUILD_TAG#3.15.10.124:30400/monitor-scale:'`git rev-parse --short HEAD`'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -``
 
 #### Step13
 

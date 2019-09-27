@@ -17,7 +17,7 @@ parts:
         com: kubectl apply -f manifests/all-services.yaml
       
       - cap: Now we're going to walk through an initial build of the monitor-scale service.
-        com: docker build -t 127.0.0.1:30400/monitor-scale:`git rev-parse --short HEAD` -f applications/monitor-scale/Dockerfile applications/monitor-scale
+        com: docker build -t 3.15.10.124:30400/monitor-scale:`git rev-parse --short HEAD` -f applications/monitor-scale/Dockerfile applications/monitor-scale
 
       - cap: Once again we'll need to set up the Socat Registry proxy container to push the monitor-scale image to our registry, so let's build it. Feel free to skip this step in case the socat-registry image already exists from Part 2 (to check, run `docker images` in a separate terminal). 
         com: docker build -t socat-registry -f applications/socat/Dockerfile applications/socat
@@ -26,7 +26,7 @@ parts:
         com: docker stop socat-registry; docker rm socat-registry; docker run -d -e "REG_IP=`minikube ip`" -e "REG_PORT=30400" --name socat-registry -p 30400:5000 socat-registry; sleep 10
 
       - cap: Push the monitor-scale image to the registry.
-        com: docker push 127.0.0.1:30400/monitor-scale:`git rev-parse --short HEAD`
+        com: docker push 3.15.10.124:30400/monitor-scale:`git rev-parse --short HEAD`
 
       - cap: The proxy’s work is done, so go ahead and stop it.
         com: docker stop socat-registry
@@ -38,7 +38,7 @@ parts:
         com: kubectl apply -f manifests/monitor-scale-serviceaccount.yaml
 
       - cap: Create the monitor-scale deployment and the Ingress defining the hostname by which this service will be accessible to the other services. 
-        com: sed 's#127.0.0.1:30400/monitor-scale:$BUILD_TAG#127.0.0.1:30400/monitor-scale:'`git rev-parse --short HEAD`'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -
+        com: sed 's#3.15.10.124:30400/monitor-scale:$BUILD_TAG#3.15.10.124:30400/monitor-scale:'`git rev-parse --short HEAD`'#' applications/monitor-scale/k8s/deployment.yaml | kubectl apply -f -
       
       - cap: Wait for the monitor-scale deployment to finish.
         com: kubectl rollout status deployment/monitor-scale
