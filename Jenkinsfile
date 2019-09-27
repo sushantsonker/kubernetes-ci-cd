@@ -1,27 +1,16 @@
 node {
 
-    checkout scm
-
-    env.DOCKER_API_VERSION="1.23"
-    
-    sh "git rev-parse --short HEAD > commit-id"
-
-    tag = readFile('commit-id').replace("\n", "").replace("\r", "")
-    appName = "hello-kenzan"
-    registryHost = "3.15.10.124:30400/"
-    imageName = "${registryHost}${appName}:${tag}"
-    env.BUILDIMG=imageName
-
     stage "Build"
     
-        sh "docker build -t ${imageName} -f applications/hello-kenzan/Dockerfile applications/hello-kenzan"
+        sh "echo Build"
     
     stage "Push"
 
-        sh "docker push ${imageName}"
+        sh "echo push" 
 
     stage "Deploy"
 
-        kubernetesDeploy configs: "applications/${appName}/k8s/*.yaml", kubeconfigId: 'kenzan_kubeconfig'
+        sh "echo Deploy"
+        kubernetesDeploy configs: "applications/busybox/k8s/pod.yaml", kubeconfigId: 'kenzan_kubeconfig'       
 
 }
