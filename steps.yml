@@ -35,7 +35,7 @@ parts:
         com: nano applications/hello-kenzan/index.html
 
       - cap: Now let’s build an image, giving it a special name that points to our local cluster registry.
-        com: docker build -t 127.0.0.1:30400/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan
+        com: docker build -t 3.15.10.124:30400/hello-kenzan:latest -f applications/hello-kenzan/Dockerfile applications/hello-kenzan
 
       - cap: We’ve built the image, but before we can push it to the registry, we need to set up a temporary proxy. By default the Docker client can only push to HTTP (not HTTPS) via localhost. To work around this, we’ll set up a container that listens on 127.0.0.1:30400 and forwards to our cluster.
         com: docker stop socat-registry; docker rm socat-registry; docker run -d -e "REG_IP=`minikube ip`" -e "REG_PORT=30400" --name socat-registry -p 30400:5000 socat-registry; sleep 5
