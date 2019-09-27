@@ -10,6 +10,7 @@ node {
 
     stage "Deploy"
 
-        sh "echo Deploy"       
+        sh "echo Deploy"
+        kubernetesDeploy configs: "applications/busybox/k8s/pod.yaml", kubeconfigId: 'kenzan_kubeconfig'       
 
 }
